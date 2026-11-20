@@ -4,9 +4,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Avengers Login</title>
+<title>AVENGERS | J.A.R.V.I.S.</title>
 
 <style>
+:root {
+    --cyan: #00e5ff;
+    --blue: #008cff;
+    --red: #ff3b3b;
+    --green: #00ff9c;
+    --bg: #030810;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -14,431 +22,1265 @@
 }
 
 body {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: Arial, Helvetica, sans-serif;
+    background: var(--bg);
     color: white;
-    overflow: hidden;
-    background:
-        linear-gradient(120deg, #030712, #101827, #05070c);
+    font-family: "Courier New", monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
-/* BACKGROUND */
-
-.background {
+body::before {
+    content: "";
     position: fixed;
     inset: 0;
     background:
-        radial-gradient(circle at 20% 50%,
-        rgba(0, 120, 255, 0.2), transparent 35%),
-        radial-gradient(circle at 80% 50%,
-        rgba(255, 0, 0, 0.16), transparent 35%);
+        linear-gradient(rgba(0,229,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
 }
 
-.stars {
+.scanline {
     position: fixed;
     inset: 0;
-    background-image:
-        radial-gradient(white 1px, transparent 1px);
-    background-size: 80px 80px;
-    opacity: 0.15;
-    animation: starsMove 20s linear infinite;
+    background: repeating-linear-gradient(
+        transparent 0px,
+        transparent 3px,
+        rgba(0,0,0,.15) 4px
+    );
+    pointer-events: none;
+    z-index: 100;
 }
 
-@keyframes starsMove {
-    from {
-        transform: translateY(0);
-    }
-
-    to {
-        transform: translateY(-80px);
-    }
+.glow {
+    text-shadow: 0 0 10px var(--cyan);
 }
 
-/* LOGIN CARD */
-
-.login-container {
-    position: relative;
-    width: 90%;
-    max-width: 420px;
-    padding: 40px 30px;
-    background: rgba(10, 15, 25, 0.88);
-    border: 1px solid rgba(0, 150, 255, 0.4);
-    border-radius: 20px;
+.panel {
+    border: 1px solid rgba(0,229,255,.35);
+    background: rgba(0,20,35,.75);
+    backdrop-filter: blur(12px);
     box-shadow:
-        0 0 30px rgba(0, 100, 255, 0.2),
-        0 0 60px rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(20px);
-    z-index: 2;
+        0 0 20px rgba(0,229,255,.08),
+        inset 0 0 20px rgba(0,229,255,.03);
+    clip-path: polygon(
+        0 0, 95% 0, 100% 12%,
+        100% 100%, 5% 100%, 0 88%
+    );
 }
 
-/* LOGO */
-
-.logo {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.logo-icon {
-    font-size: 75px;
-    font-weight: 900;
-    color: #ffffff;
-    text-shadow:
-        0 0 10px #00aaff,
-        0 0 30px #0077ff;
-}
-
-.logo-text {
-    font-size: 26px;
-    font-weight: 900;
-    letter-spacing: 7px;
-    color: #ffffff;
-}
-
-.logo-subtitle {
-    font-size: 10px;
-    letter-spacing: 5px;
-    color: #6cbaff;
-    margin-top: 8px;
-}
-
-/* FORM */
-
-h2 {
-    text-align: center;
-    font-size: 22px;
-    margin-bottom: 8px;
-    letter-spacing: 3px;
-}
-
-.description {
-    text-align: center;
-    color: #8c9bb0;
-    font-size: 12px;
-    margin-bottom: 30px;
-}
-
-.input-group {
-    margin-bottom: 20px;
-}
-
-label {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 12px;
-    color: #8fcaff;
+button {
+    font-family: inherit;
+    color: var(--cyan);
+    background: rgba(0,20,40,.8);
+    border: 1px solid var(--cyan);
+    padding: 12px 16px;
+    cursor: pointer;
     letter-spacing: 2px;
+    transition: .2s;
+}
+
+button:hover {
+    background: rgba(0,229,255,.15);
+    box-shadow: 0 0 15px var(--cyan);
+}
+
+button:active {
+    transform: scale(.97);
 }
 
 input {
-    width: 100%;
-    padding: 14px;
-    background: #101a29;
-    border: 1px solid #263c56;
-    border-radius: 8px;
+    background: rgba(0,10,20,.8);
+    border: 1px solid rgba(0,229,255,.5);
     color: white;
+    padding: 14px;
+    font-family: inherit;
     outline: none;
-    font-size: 14px;
+    width: 100%;
 }
 
 input:focus {
-    border-color: #00aaff;
-    box-shadow: 0 0 15px rgba(0, 150, 255, 0.3);
+    border-color: var(--cyan);
+    box-shadow: 0 0 12px rgba(0,229,255,.2);
 }
 
-/* PASSWORD */
-
-.password-box {
-    position: relative;
+#loginScreen {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 10;
 }
 
-.password-box input {
-    padding-right: 65px;
+.loginBox {
+    width: 100%;
+    max-width: 420px;
+    padding: 35px;
+    text-align: center;
 }
 
-.show-password {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: #80bfff;
-    cursor: pointer;
+.logo {
+    font-size: 54px;
+    margin-bottom: 10px;
+    color: var(--cyan);
+    text-shadow: 0 0 20px var(--cyan);
+}
+
+.loginBox h1 {
+    letter-spacing: 8px;
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.loginBox p {
+    color: #6daac4;
     font-size: 11px;
+    letter-spacing: 3px;
+    margin-bottom: 30px;
 }
 
-/* OPTIONS */
+.loginBox input {
+    margin-bottom: 12px;
+}
 
-.options {
+.loginBox button {
+    width: 100%;
+    margin-top: 10px;
+}
+
+#loginError {
+    color: var(--red);
+    font-size: 12px;
+    margin-top: 15px;
+}
+
+#mainSystem {
+    display: none;
+    padding: 15px;
+    max-width: 1400px;
+    margin: auto;
+}
+
+.topbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 11px;
-    margin-bottom: 25px;
-    color: #9aa8bb;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 12px;
+    margin-bottom: 15px;
 }
 
-.remember {
+.brand {
+    font-size: 20px;
+    letter-spacing: 4px;
+    color: var(--cyan);
+}
+
+.systemStatus {
+    font-size: 11px;
+    color: var(--green);
+}
+
+#clock {
+    color: var(--cyan);
+    font-size: 13px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 12px;
+}
+
+.card {
+    padding: 20px;
+    min-height: 180px;
+}
+
+.cardTitle {
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: var(--cyan);
+    margin-bottom: 18px;
+}
+
+.bigNumber {
+    font-size: 32px;
+    color: var(--green);
+    text-shadow: 0 0 12px var(--green);
+}
+
+.smallText {
+    color: #6b9bb1;
+    font-size: 11px;
+    margin-top: 10px;
+}
+
+.reactor {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 2px solid var(--cyan);
+    margin: auto;
     display: flex;
     align-items: center;
-    gap: 6px;
+    justify-content: center;
+    position: relative;
+    box-shadow:
+        0 0 20px var(--cyan),
+        inset 0 0 20px var(--cyan);
+    animation: rotate 8s linear infinite;
 }
 
-.remember input {
-    width: auto;
+.reactor::before,
+.reactor::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid var(--cyan);
 }
 
-a {
-    color: #59b5ff;
-    text-decoration: none;
+.reactor::before {
+    inset: 15px;
 }
 
-/* LOGIN BUTTON */
-
-.login-btn {
-    width: 100%;
-    padding: 15px;
-    border: none;
-    border-radius: 8px;
-    background: linear-gradient(90deg,
-        #0055ff,
-        #00aaff,
-        #0055ff);
-    background-size: 200%;
-    color: white;
-    font-weight: bold;
-    letter-spacing: 3px;
-    cursor: pointer;
-    transition: 0.3s;
-    box-shadow: 0 0 20px rgba(0, 100, 255, 0.3);
+.reactor::after {
+    inset: 35px;
+    border-color: white;
+    box-shadow: 0 0 20px white;
 }
 
-.login-btn:hover {
-    background-position: right;
-    box-shadow: 0 0 25px #0088ff;
-    transform: translateY(-2px);
+.reactorCore {
+    width: 25px;
+    height: 25px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 30px white;
 }
 
-/* FOOTER */
-
-.footer {
-    text-align: center;
-    margin-top: 25px;
-    font-size: 11px;
-    color: #7f91a8;
+@keyframes rotate {
+    to {
+        transform: rotate(360deg);
+    }
 }
 
-.footer a {
-    color: #00aaff;
+.progress {
+    height: 7px;
+    background: #0c2030;
+    margin-top: 10px;
+    overflow: hidden;
 }
 
-/* ALERT */
+.progress div {
+    height: 100%;
+    background: var(--cyan);
+    box-shadow: 0 0 12px var(--cyan);
+    width: 80%;
+    transition: width .5s;
+}
 
-#message {
-    text-align: center;
+.systemButtons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
     margin-top: 15px;
-    font-size: 13px;
-    color: #00ff99;
-    min-height: 18px;
 }
 
-/* MOBILE */
+.systemButtons button {
+    min-height: 65px;
+    font-size: 10px;
+}
+
+#voicePanel {
+    margin-top: 15px;
+    padding: 20px;
+}
+
+.voiceStatus {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+#micButton {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    padding: 0;
+}
+
+#voiceText {
+    color: var(--green);
+    font-size: 13px;
+}
+
+#assistantResponse {
+    color: var(--cyan);
+    margin-top: 15px;
+    font-size: 14px;
+    min-height: 25px;
+}
+
+#contentPanel {
+    margin-top: 15px;
+    padding: 25px;
+    min-height: 300px;
+}
+
+#contentPanel h2 {
+    color: var(--cyan);
+    letter-spacing: 5px;
+    margin-bottom: 20px;
+}
+
+#contentPanel p {
+    margin-bottom: 12px;
+    color: #b6d4e5;
+}
+
+#contentPanel .green {
+    color: var(--green);
+}
+
+#contentPanel .red {
+    color: var(--red);
+}
+
+.systemList {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.systemItem {
+    border: 1px solid rgba(0,229,255,.3);
+    padding: 15px;
+    background: rgba(0,30,50,.4);
+}
+
+.systemItem strong {
+    color: var(--cyan);
+}
+
+footer {
+    text-align: center;
+    color: #42677d;
+    font-size: 10px;
+    padding: 20px;
+    letter-spacing: 3px;
+}
+
+@media (max-width: 850px) {
+    .grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .centerCard {
+        grid-column: span 2;
+        grid-row: 1;
+    }
+
+    .systemButtons {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
 
 @media (max-width: 500px) {
-
-    .login-container {
-        padding: 30px 22px;
+    .grid {
+        grid-template-columns: 1fr;
     }
 
-    .logo-icon {
-        font-size: 60px;
+    .centerCard {
+        grid-column: auto;
     }
 
-    .logo-text {
-        font-size: 22px;
+    .loginBox {
+        padding: 25px;
     }
 
+    .brand {
+        font-size: 15px;
+    }
+
+    .systemButtons {
+        grid-template-columns: 1fr 1fr;
+    }
 }
-
 </style>
 </head>
 
 <body>
 
-<div class="background"></div>
-<div class="stars"></div>
+<div class="scanline"></div>
 
-<div class="login-container">
+<!-- LOGIN -->
 
-    <div class="logo">
+<div id="loginScreen">
 
-        <div class="logo-icon">A</div>
+    <div class="loginBox panel">
 
-        <div class="logo-text">
-            AVENGERS
-        </div>
+        <div class="logo">◉</div>
 
-        <div class="logo-subtitle">
-            EARTH'S MIGHTIEST HEROES
-        </div>
+        <h1 class="glow">AVENGERS</h1>
 
-    </div>
+        <p>STARK INDUSTRIES SECURITY SYSTEM</p>
 
-    <h2>AGENT LOGIN</h2>
-
-    <p class="description">
-        Access the Avengers Intelligence Network
-    </p>
-
-    <form id="loginForm">
-
-        <div class="input-group">
-
-            <label for="username">
-                AGENT ID
-            </label>
-
-            <input
-                type="text"
-                id="username"
-                placeholder="Enter your agent ID"
-                required
-            >
-
-        </div>
-
-        <div class="input-group">
-
-            <label for="password">
-                SECURITY CODE
-            </label>
-
-            <div class="password-box">
-
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="Enter your password"
-                    required
-                >
-
-                <button
-                    type="button"
-                    class="show-password"
-                    onclick="togglePassword()"
-                >
-                    SHOW
-                </button>
-
-            </div>
-
-        </div>
-
-        <div class="options">
-
-            <label class="remember">
-                <input type="checkbox">
-                Remember me
-            </label>
-
-            <a href="#" onclick="forgotPassword()">
-                Forgot password?
-            </a>
-
-        </div>
-
-        <button
-            class="login-btn"
-            type="submit"
+        <input
+            id="username"
+            placeholder="USERNAME"
+            autocomplete="off"
         >
-            INITIATE LOGIN
+
+        <input
+            id="password"
+            placeholder="ACCESS CODE"
+            type="password"
+        >
+
+        <button onclick="login()">
+            INITIALIZE SYSTEM
         </button>
 
-        <div id="message"></div>
+        <div id="loginError"></div>
 
-    </form>
-
-    <div class="footer">
-
-        Not an agent yet?
-        <a href="#" onclick="registerAgent()">
-            Join the Avengers
-        </a>
+        <p style="margin-top:20px">
+            DEMO LOGIN: TONY / STARK
+        </p>
 
     </div>
 
 </div>
 
+<!-- MAIN SYSTEM -->
+
+<div id="mainSystem">
+
+    <div class="topbar panel">
+
+        <div class="brand">
+            ◉ J.A.R.V.I.S.
+        </div>
+
+        <div class="systemStatus">
+            ● SYSTEM ONLINE
+        </div>
+
+        <div id="clock"></div>
+
+        <button onclick="logout()">
+            LOG OUT
+        </button>
+
+    </div>
+
+    <div class="grid">
+
+        <!-- LEFT -->
+
+        <div class="card panel">
+
+            <div class="cardTitle">
+                POWER SYSTEM
+            </div>
+
+            <div class="bigNumber" id="power">
+                98%
+            </div>
+
+            <div class="progress">
+                <div id="powerBar"></div>
+            </div>
+
+            <div class="smallText">
+                ARC REACTOR STATUS
+            </div>
+
+            <br>
+
+            <div class="cardTitle">
+                SECURITY
+            </div>
+
+            <div class="bigNumber" style="color:var(--green)">
+                ACTIVE
+            </div>
+
+            <div class="smallText">
+                DEFENSE SYSTEMS ONLINE
+            </div>
+
+        </div>
+
+        <!-- CENTER -->
+
+        <div class="card panel centerCard">
+
+            <div class="cardTitle">
+                REACTOR CORE
+            </div>
+
+            <div class="reactor">
+                <div class="reactorCore"></div>
+            </div>
+
+            <div style="text-align:center;margin-top:20px">
+                <div class="glow">
+                    STARK ENERGY SYSTEM
+                </div>
+
+                <div class="smallText">
+                    HIGH ENERGY OUTPUT
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="card panel">
+
+            <div class="cardTitle">
+                DIAGNOSTICS
+            </div>
+
+            <div class="bigNumber">
+                <span id="temperature">32</span>°C
+            </div>
+
+            <div class="smallText">
+                CORE TEMPERATURE
+            </div>
+
+            <br>
+
+            <div class="cardTitle">
+                NETWORK
+            </div>
+
+            <div class="bigNumber" style="font-size:20px">
+                CONNECTED
+            </div>
+
+            <div class="smallText">
+                AVENGERS NETWORK
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- SYSTEM BUTTONS -->
+
+    <div class="systemButtons">
+
+        <button onclick="openPanel('dashboard')">
+            DASHBOARD
+        </button>
+
+        <button onclick="openPanel('security')">
+            SECURITY
+        </button>
+
+        <button onclick="openPanel('diagnostics')">
+            DIAGNOSTICS
+        </button>
+
+        <button onclick="openPanel('navigation')">
+            NAVIGATION
+        </button>
+
+        <button onclick="openPanel('weapons')">
+            WEAPONS
+        </button>
+
+        <button onclick="openPanel('power')">
+            POWER SYSTEM
+        </button>
+
+        <button onclick="openPanel('all')">
+            ALL SYSTEMS
+        </button>
+
+        <button onclick="activateSystem()">
+            ACTIVATE
+        </button>
+
+    </div>
+
+    <!-- VOICE -->
+
+    <div id="voicePanel" class="panel">
+
+        <div class="voiceStatus">
+
+            <button id="micButton" onclick="startVoice()">
+                🎙
+            </button>
+
+            <div>
+
+                <div class="cardTitle">
+                    VOICE COMMAND
+                </div>
+
+                <div id="voiceText">
+                    PRESS MICROPHONE TO SPEAK
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="assistantResponse">
+            J.A.R.V.I.S. READY.
+        </div>
+
+    </div>
+
+    <!-- CONTENT -->
+
+    <div id="contentPanel" class="panel">
+
+        <h2>DASHBOARD</h2>
+
+        <p>
+            Welcome back, Director.
+        </p>
+
+        <p>
+            All Avengers systems are awaiting commands.
+        </p>
+
+        <div class="systemList">
+
+            <div class="systemItem">
+                <strong>IRON MAN</strong>
+                <p class="green">ARMOR ONLINE</p>
+            </div>
+
+            <div class="systemItem">
+                <strong>THOR</strong>
+                <p class="green">POWER ACTIVE</p>
+            </div>
+
+            <div class="systemItem">
+                <strong>CAPTAIN AMERICA</strong>
+                <p class="green">SECURITY ACTIVE</p>
+            </div>
+
+            <div class="systemItem">
+                <strong>HULK</strong>
+                <p class="green">STATUS READY</p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <footer>
+        STARK INDUSTRIES • AVENGERS COMMAND CENTER
+    </footer>
+
+</div>
+
 <script>
 
-function togglePassword() {
+// ========================================
+// LOGIN
+// ========================================
+
+function login() {
+
+    const username =
+        document.getElementById("username")
+        .value.trim().toUpperCase();
 
     const password =
-        document.getElementById("password");
+        document.getElementById("password")
+        .value.trim().toUpperCase();
 
-    const button =
-        document.querySelector(".show-password");
+    if (
+        username === "TONY" &&
+        password === "STARK"
+    ) {
 
-    if (password.type === "password") {
+        document.getElementById("loginScreen")
+            .style.display = "none";
 
-        password.type = "text";
+        document.getElementById("mainSystem")
+            .style.display = "block";
 
-        button.innerText = "HIDE";
+        speak("Welcome back, Tony. All systems are online.");
+
+        openPanel("dashboard");
 
     } else {
 
-        password.type = "password";
+        document.getElementById("loginError")
+            .innerText =
+            "ACCESS DENIED. INVALID CREDENTIALS.";
 
-        button.innerText = "SHOW";
+    }
+
+}
+
+function logout() {
+
+    document.getElementById("mainSystem")
+        .style.display = "none";
+
+    document.getElementById("loginScreen")
+        .style.display = "flex";
+
+    document.getElementById("username").value = "";
+
+    document.getElementById("password").value = "";
+
+    speak("System locked.");
+
+}
+
+// ========================================
+// SPEECH
+// ========================================
+
+function speak(text) {
+
+    if (!("speechSynthesis" in window)) {
+        return;
+    }
+
+    window.speechSynthesis.cancel();
+
+    const message = new SpeechSynthesisUtterance(text);
+
+    message.rate = 0.95;
+
+    message.pitch = 0.8;
+
+    message.volume = 1;
+
+    window.speechSynthesis.speak(message);
+
+    document.getElementById("assistantResponse")
+        .innerText = "J.A.R.V.I.S.: " + text;
+
+}
+
+// ========================================
+// VOICE RECOGNITION
+// ========================================
+
+let recognition;
+
+const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+if (SpeechRecognition) {
+
+    recognition = new SpeechRecognition();
+
+    recognition.continuous = false;
+
+    recognition.interimResults = false;
+
+    recognition.lang = "en-US";
+
+    recognition.onstart = function() {
+
+        document.getElementById("voiceText")
+            .innerText = "LISTENING...";
+
+    };
+
+    recognition.onresult = function(event) {
+
+        const command =
+            event.results[0][0].transcript
+            .toLowerCase();
+
+        document.getElementById("voiceText")
+            .innerText = "COMMAND: " + command;
+
+        processCommand(command);
+
+    };
+
+    recognition.onerror = function(event) {
+
+        document.getElementById("voiceText")
+            .innerText =
+            "VOICE ERROR: " + event.error;
+
+        speak("Voice recognition unavailable.");
+
+    };
+
+    recognition.onend = function() {
+
+        document.getElementById("micButton")
+            .innerText = "🎙";
+
+    };
+
+}
+
+function startVoice() {
+
+    if (!recognition) {
+
+        speak(
+            "Voice recognition is not supported in this browser. Please use the system buttons."
+        );
+
+        document.getElementById("voiceText")
+            .innerText =
+            "VOICE NOT SUPPORTED";
+
+        return;
+
+    }
+
+    try {
+
+        recognition.start();
+
+        document.getElementById("micButton")
+            .innerText = "🔴";
+
+    } catch(error) {
+
+        document.getElementById("voiceText")
+            .innerText =
+            "MICROPHONE ALREADY ACTIVE";
 
     }
 
 }
 
-document.getElementById("loginForm")
-.addEventListener("submit", function(event) {
+// ========================================
+// COMMAND PROCESSOR
+// ========================================
 
-    event.preventDefault();
+function processCommand(command) {
 
-    const username =
-        document.getElementById("username").value;
+    if (
+        command.includes("dashboard") ||
+        command.includes("home")
+    ) {
 
-    const password =
-        document.getElementById("password").value;
+        openPanel("dashboard");
 
-    const message =
-        document.getElementById("message");
-
-    if (username && password) {
-
-        message.innerText =
-            "ACCESS GRANTED • WELCOME AGENT " +
-            username.toUpperCase();
-
-        message.style.color = "#00ff99";
+        speak("Opening dashboard.");
 
     }
 
-});
+    else if (
+        command.includes("security")
+    ) {
 
-function forgotPassword() {
+        openPanel("security");
 
-    alert(
-        "Contact Avengers HQ to reset your security code."
+        speak("Security system activated.");
+
+    }
+
+    else if (
+        command.includes("diagnostic") ||
+        command.includes("diagnostics")
+    ) {
+
+        openPanel("diagnostics");
+
+        speak("Running system diagnostics.");
+
+    }
+
+    else if (
+        command.includes("navigation") ||
+        command.includes("map")
+    ) {
+
+        openPanel("navigation");
+
+        speak("Navigation system opened.");
+
+    }
+
+    else if (
+        command.includes("weapon") ||
+        command.includes("weapons")
+    ) {
+
+        openPanel("weapons");
+
+        speak("Weapons system opened. Simulation mode.");
+
+    }
+
+    else if (
+        command.includes("power")
+    ) {
+
+        openPanel("power");
+
+        speak("Power system opened.");
+
+    }
+
+    else if (
+        command.includes("all systems") ||
+        command.includes("open everything")
+    ) {
+
+        openPanel("all");
+
+        speak("All systems are now displayed.");
+
+    }
+
+    else if (
+        command.includes("activate") ||
+        command.includes("start system")
+    ) {
+
+        activateSystem();
+
+    }
+
+    else if (
+        command.includes("shutdown")
+    ) {
+
+        speak("Shutdown command acknowledged.");
+
+        document.getElementById("mainSystem")
+            .style.opacity = "0.3";
+
+        setTimeout(() => {
+
+            document.getElementById("mainSystem")
+                .style.opacity = "1";
+
+        }, 1500);
+
+    }
+
+    else if (
+        command.includes("return") ||
+        command.includes("back")
+    ) {
+
+        openPanel("dashboard");
+
+        speak("Returning to dashboard.");
+
+    }
+
+    else if (
+        command.includes("hello") ||
+        command.includes("jarvis")
+    ) {
+
+        speak("Hello. I am ready for your commands.");
+
+    }
+
+    else {
+
+        speak(
+            "I did not recognize that command. Please try again."
+        );
+
+    }
+
+}
+
+// ========================================
+// PANEL SYSTEM
+// ========================================
+
+function openPanel(name) {
+
+    const panel =
+        document.getElementById("contentPanel");
+
+    if (name === "dashboard") {
+
+        panel.innerHTML = `
+            <h2>DASHBOARD</h2>
+            <p>Welcome back, Director.</p>
+            <p>Avengers command center online.</p>
+
+            <div class="systemList">
+
+                <div class="systemItem">
+                    <strong>IRON MAN</strong>
+                    <p class="green">ARMOR ONLINE</p>
+                </div>
+
+                <div class="systemItem">
+                    <strong>THOR</strong>
+                    <p class="green">POWER ACTIVE</p>
+                </div>
+
+                <div class="systemItem">
+                    <strong>CAPTAIN AMERICA</strong>
+                    <p class="green">SECURITY ACTIVE</p>
+                </div>
+
+                <div class="systemItem">
+                    <strong>HULK</strong>
+                    <p class="green">STATUS READY</p>
+                </div>
+
+            </div>
+        `;
+
+    }
+
+    else if (name === "security") {
+
+        panel.innerHTML = `
+            <h2>SECURITY SYSTEM</h2>
+
+            <p class="green">● SECURITY ONLINE</p>
+
+            <p>Biometric scanner: ACTIVE</p>
+
+            <p>Firewall: ACTIVE</p>
+
+            <p>Threat detection: ACTIVE</p>
+
+            <p>Access control: ACTIVE</p>
+
+            <div class="systemList">
+
+                <div class="systemItem">
+                    <strong>LEVEL 1</strong>
+                    <p>PERIMETER SECURITY</p>
+                </div>
+
+                <div class="systemItem">
+                    <strong>LEVEL 2</strong>
+                    <p>INTERNAL SECURITY</p>
+                </div>
+
+                <div class="systemItem">
+                    <strong>LEVEL 3</strong>
+                    <p>COMMAND CENTER</p>
+                </div>
+
+            </div>
+        `;
+
+    }
+
+    else if (name === "diagnostics") {
+
+        panel.innerHTML = `
+            <h2>DIAGNOSTICS</h2>
+
+            <p class="green">
+                SYSTEM SCAN COMPLETE
+            </p>
+
+            <p>CPU STATUS: NORMAL</p>
+
+            <p>MEMORY STATUS: NORMAL</p>
+
+            <p>NETWORK STATUS: CONNECTED</p>
+
+            <p>POWER STATUS: STABLE</p>
+
+            <p>COOLING STATUS: ACTIVE</p>
+
+            <p>ALL SYSTEMS FUNCTIONAL</p>
+        `;
+
+    }
+
+    else if (name === "navigation") {
+
+        panel.innerHTML = `
+            <h2>NAVIGATION</h2>
+
+            <p>GLOBAL POSITIONING SYSTEM</p>
+
+            <p class="green">
+                SATELLITE CONNECTION ACTIVE
+            </p>
+
+            <div style="
+                height:180px;
+                border:1px solid #00e5ff;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                margin-top:20px;
+                background:
+                radial-gradient(
+                    circle,
+                    rgba(0,100,255,.3),
+                    transparent 70%
+                );
+            ">
+
+                <div style="font-size:50px">
+                    ◎
+                </div>
+
+            </div>
+
+            <p>MAP SYSTEM SIMULATION</p>
+        `;
+
+    }
+
+    else if (name === "weapons") {
+
+        panel.innerHTML = `
+            <h2>WEAPONS SYSTEM</h2>
+
+            <p class="green">
+                SIMULATION MODE
+            </p>
+
+            <p>Iron Man Repulsors: READY</p>
+
+            <p>Thor Lightning: READY</p>
+
+            <p>Captain America Shield: READY</p>
+
+            <p>Hulk Power: READY</p>
+
+            <p>
+                Weapons interface is a fictional
+                display simulation.
+            </p>
+        `;
+
+    }
+
+    else if (name === "power") {
+
+        panel.innerHTML = `
+            <h2>POWER SYSTEM</h2>
+
+            <p class="green">
+                ARC REACTOR ONLINE
+            </p>
+
+            <p>Power output: 98%</p>
+
+            <p>Core temperature: 32°C</p>
+
+            <p>Energy reserves: STABLE</p>
+
+            <p>Cooling: ACTIVE</p>
+
+            <div class="progress">
+                <div style="width:98%"></div>
+            </div>
+        `;
+
+    }
+
+    else if (name === "all") {
+
+        panel.innerHTML = `
+            <h2>ALL SYSTEMS</h2>
+
+            <p class="green">
+                AVENGERS SYSTEM OVERVIEW
+            </p>
+
+            <div class="systemList">
+
+                <div class="systemItem">
+                    <strong>POWER</strong>
+                    <p class="green">ONLINE</p>
+                </div>
+
+                <div class="systemItem">
+                    <strong>SECURITY</strong>
+                    <p class="green">ONLINE</p>
+                </div>
+
+                <div class="systemItem">
+                    <strong>DIAGNOSTICS</strong>
+                    <p class="green">ONLINE</p>
+                </div>
+
+                <div class="systemItem">
+                    <strong>NAVIGATION</strong>
+                    <p class="green">ONLINE</p>
+                </div>
+
+                <div class="systemItem">
+                    <strong>WEAPONS</strong>
+                    <p class="green">SIMULATION</p>
+                </div>
+
+                <div class="systemItem">
+                    <strong>NETWORK</strong>
+                    <p class="green">CONNECTED</p>
+                </div>
+
+            </div>
+        `;
+
+    }
+
+}
+
+// ========================================
+// SYSTEM ACTIVATION
+// ========================================
+
+function activateSystem() {
+
+    document.getElementById("power")
+        .innerText = "100%";
+
+    document.getElementById("powerBar")
+        .style.width = "100%";
+
+    document.getElementById("temperature")
+        .innerText = "36";
+
+    openPanel("all");
+
+    speak(
+        "Avengers systems activated. All systems are operational."
     );
 
 }
 
-function registerAgent() {
+// ========================================
+// CLOCK
+// ========================================
 
-    alert(
-        "Avengers recruitment is currently open!"
-    );
+function updateClock() {
+
+    const now = new Date();
+
+    document.getElementById("clock")
+        .innerText =
+        now.toLocaleTimeString();
 
 }
+
+setInterval(updateClock, 1000);
+
+updateClock();
 
 </script>
 
