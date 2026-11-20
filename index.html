@@ -1,0 +1,446 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avengers Login</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+    overflow: hidden;
+    background:
+        linear-gradient(120deg, #030712, #101827, #05070c);
+}
+
+/* BACKGROUND */
+
+.background {
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at 20% 50%,
+        rgba(0, 120, 255, 0.2), transparent 35%),
+        radial-gradient(circle at 80% 50%,
+        rgba(255, 0, 0, 0.16), transparent 35%);
+}
+
+.stars {
+    position: fixed;
+    inset: 0;
+    background-image:
+        radial-gradient(white 1px, transparent 1px);
+    background-size: 80px 80px;
+    opacity: 0.15;
+    animation: starsMove 20s linear infinite;
+}
+
+@keyframes starsMove {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(-80px);
+    }
+}
+
+/* LOGIN CARD */
+
+.login-container {
+    position: relative;
+    width: 90%;
+    max-width: 420px;
+    padding: 40px 30px;
+    background: rgba(10, 15, 25, 0.88);
+    border: 1px solid rgba(0, 150, 255, 0.4);
+    border-radius: 20px;
+    box-shadow:
+        0 0 30px rgba(0, 100, 255, 0.2),
+        0 0 60px rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(20px);
+    z-index: 2;
+}
+
+/* LOGO */
+
+.logo {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo-icon {
+    font-size: 75px;
+    font-weight: 900;
+    color: #ffffff;
+    text-shadow:
+        0 0 10px #00aaff,
+        0 0 30px #0077ff;
+}
+
+.logo-text {
+    font-size: 26px;
+    font-weight: 900;
+    letter-spacing: 7px;
+    color: #ffffff;
+}
+
+.logo-subtitle {
+    font-size: 10px;
+    letter-spacing: 5px;
+    color: #6cbaff;
+    margin-top: 8px;
+}
+
+/* FORM */
+
+h2 {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 8px;
+    letter-spacing: 3px;
+}
+
+.description {
+    text-align: center;
+    color: #8c9bb0;
+    font-size: 12px;
+    margin-bottom: 30px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 12px;
+    color: #8fcaff;
+    letter-spacing: 2px;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    background: #101a29;
+    border: 1px solid #263c56;
+    border-radius: 8px;
+    color: white;
+    outline: none;
+    font-size: 14px;
+}
+
+input:focus {
+    border-color: #00aaff;
+    box-shadow: 0 0 15px rgba(0, 150, 255, 0.3);
+}
+
+/* PASSWORD */
+
+.password-box {
+    position: relative;
+}
+
+.password-box input {
+    padding-right: 65px;
+}
+
+.show-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #80bfff;
+    cursor: pointer;
+    font-size: 11px;
+}
+
+/* OPTIONS */
+
+.options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    margin-bottom: 25px;
+    color: #9aa8bb;
+}
+
+.remember {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.remember input {
+    width: auto;
+}
+
+a {
+    color: #59b5ff;
+    text-decoration: none;
+}
+
+/* LOGIN BUTTON */
+
+.login-btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(90deg,
+        #0055ff,
+        #00aaff,
+        #0055ff);
+    background-size: 200%;
+    color: white;
+    font-weight: bold;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 0 20px rgba(0, 100, 255, 0.3);
+}
+
+.login-btn:hover {
+    background-position: right;
+    box-shadow: 0 0 25px #0088ff;
+    transform: translateY(-2px);
+}
+
+/* FOOTER */
+
+.footer {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 11px;
+    color: #7f91a8;
+}
+
+.footer a {
+    color: #00aaff;
+}
+
+/* ALERT */
+
+#message {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 13px;
+    color: #00ff99;
+    min-height: 18px;
+}
+
+/* MOBILE */
+
+@media (max-width: 500px) {
+
+    .login-container {
+        padding: 30px 22px;
+    }
+
+    .logo-icon {
+        font-size: 60px;
+    }
+
+    .logo-text {
+        font-size: 22px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="background"></div>
+<div class="stars"></div>
+
+<div class="login-container">
+
+    <div class="logo">
+
+        <div class="logo-icon">A</div>
+
+        <div class="logo-text">
+            AVENGERS
+        </div>
+
+        <div class="logo-subtitle">
+            EARTH'S MIGHTIEST HEROES
+        </div>
+
+    </div>
+
+    <h2>AGENT LOGIN</h2>
+
+    <p class="description">
+        Access the Avengers Intelligence Network
+    </p>
+
+    <form id="loginForm">
+
+        <div class="input-group">
+
+            <label for="username">
+                AGENT ID
+            </label>
+
+            <input
+                type="text"
+                id="username"
+                placeholder="Enter your agent ID"
+                required
+            >
+
+        </div>
+
+        <div class="input-group">
+
+            <label for="password">
+                SECURITY CODE
+            </label>
+
+            <div class="password-box">
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter your password"
+                    required
+                >
+
+                <button
+                    type="button"
+                    class="show-password"
+                    onclick="togglePassword()"
+                >
+                    SHOW
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="options">
+
+            <label class="remember">
+                <input type="checkbox">
+                Remember me
+            </label>
+
+            <a href="#" onclick="forgotPassword()">
+                Forgot password?
+            </a>
+
+        </div>
+
+        <button
+            class="login-btn"
+            type="submit"
+        >
+            INITIATE LOGIN
+        </button>
+
+        <div id="message"></div>
+
+    </form>
+
+    <div class="footer">
+
+        Not an agent yet?
+        <a href="#" onclick="registerAgent()">
+            Join the Avengers
+        </a>
+
+    </div>
+
+</div>
+
+<script>
+
+function togglePassword() {
+
+    const password =
+        document.getElementById("password");
+
+    const button =
+        document.querySelector(".show-password");
+
+    if (password.type === "password") {
+
+        password.type = "text";
+
+        button.innerText = "HIDE";
+
+    } else {
+
+        password.type = "password";
+
+        button.innerText = "SHOW";
+
+    }
+
+}
+
+document.getElementById("loginForm")
+.addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const username =
+        document.getElementById("username").value;
+
+    const password =
+        document.getElementById("password").value;
+
+    const message =
+        document.getElementById("message");
+
+    if (username && password) {
+
+        message.innerText =
+            "ACCESS GRANTED • WELCOME AGENT " +
+            username.toUpperCase();
+
+        message.style.color = "#00ff99";
+
+    }
+
+});
+
+function forgotPassword() {
+
+    alert(
+        "Contact Avengers HQ to reset your security code."
+    );
+
+}
+
+function registerAgent() {
+
+    alert(
+        "Avengers recruitment is currently open!"
+    );
+
+}
+
+</script>
+
+</body>
+</html>
